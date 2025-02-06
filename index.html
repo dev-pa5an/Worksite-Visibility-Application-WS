@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="max-age=86400">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worksite Contractor Allocation</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <h2>Contractor Allocation</h2>
+    <div class="form-container">
+        <form id="allocationForm">
+            <label for="contractor">Contractor/SAGT Name:</label>
+            <select id="contractor">
+                <option value="">Select Contractor/SAGT Name</option>
+                <option value="TEA E">TEA E</option>
+                <option value="FMN E">FMN E</option>
+                <option value="CCO">CCO</option>
+                <!-- Add remaining options -->
+            </select>
+
+            <label for="location">Location:</label>
+            <select id="location" required>
+                <option value="">Select Location</option>
+                <option value="HBK">HBK Refurbishment Area</option>
+                <option value="PM_Paint_WS">PM Paint WS</option>
+                <!-- Add remaining locations -->
+            </select>
+
+            <label for="equipment">Equipment:</label>
+            <select id="equipment">
+                <option value="">Select Equipment</option>
+                <option value="RT02">RT02</option>
+                <option value="RT03">RT03</option>
+                <!-- Add remaining options -->
+            </select>
+
+            <label for="workers">Workers:</label>
+            <input type="number" id="workers" min="1" required>
+
+            <button type="submit">Allocate</button>
+        </form>
+    </div>
+
+    <h1>Daily Contractor Allocation Map</h1>
+    <div class="time-container" id="currentTime"></div>
+    <div class="map-container"></div>
+    <div class="summary-container">
+        <h3>Summary of Contractor Allocation</h3>
+        <table id="summaryTable">
+            <thead>
+                <tr>
+                    <th>Contractor</th>
+                    <th>Location</th>
+                    <th>Workers</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2">Total Workers</th>
+                    <th id="totalWorkers">0</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
