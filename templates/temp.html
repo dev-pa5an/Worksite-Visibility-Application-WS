@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="max-age=86400">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worksite Contractor Allocation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 25px;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .form-container label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-container input, .form-container select, .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .form-container button {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .map-container {
+            position: relative;
+            width: 1200px;
+            height: 800px;
+            margin: auto;
+            background: url('static/map.jpg') no-repeat center;
+            background-size: contain;
+            border: 2px solid #000;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary-container {
+            position: absolute;
+            top: 100px;
+            right: -80px;
+            width: 337px;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .summary-container h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .summary-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary-container table th, .summary-container table td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: left;
+        }
+
+        .summary-container table th {
+            background-color: #f2f2f2;
+        }
+
+        .contractor-label {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .contractor-label::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid red;
+            transform: translateX(-50%);
+        }
+
+        .label-text {
+            position: absolute;
+            top: -39px;
+            left: 250%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+	       .contractor-entry {
+	    display: flex;
+	    align-items: center;
+	    gap: 5px; /* Adds spacing between "X" and text */
+	    background: white;
+	    padding: 3px 6px;
+	    border-radius: 5px;
+	    font-size: 12px;
+	    font-weight: bold;
+	    white-space: nowrap;
+	    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	    margin-top: 5px; /* Ensures each entry is on a new line */
+	}
+
+	.remove-btn {
+	    background: #ff0000;
+	    color: white;
+	    border: none;
+	    border-radius: 50%;
+	    width: 16px;
+	    height: 16px;
+	    font-size: 12px;
+	    cursor: pointer;
+	    text-align: center;
+	    line-height: 16px;
+	    font-weight: bold;
+	}
+    </style>
+</head>
+<body>
+    <h2>Contractor Allocation</h2>
+    <div class="form-container">
+        <form id="allocationForm">
+            <label for="contractor">Contractor/SAGT Name:</label>
+            <select id="contractor" >
+                <option value="">Select Contractor/SAGT Name</option>
+                <option value="TEA E">TEA E</option>
+                <option value="TEA M">TEA M</option>
+                <option value="FMN E">FMN E</option>
+                <option value="FMN M">FMN M</option>
+                <option value="FMN R">FMN R</option>
+                <option value="CCO">CCO</option>
+                <option value="RRC">RRC</option>
+                <option value="ALL">ALLWorks</option>
+                <option value="TPL">TPL</option>
+                <option value="CRW">CRW</option>
+                <option value="MTE">MTE</option>
+                <option value="CWIN">CWIN</option>
+                <option value="PAVARA">PAVARA</option>
+                <option value="ZPMC">ZPMC</option>
+                <option value="MAYPHILL">Mayphill</option>
+                <option value="CB">CB</option>
+                <option value="Thilak C">Thilak C</option>
+                <option value="AT Cooray">AT Cooray</option>
+                <option value="Hayleys">Hayleys</option>
+                <option value="Termss G">Termss G</option>
+            </select>
+
+            <label for="location">Location:</label>
+            <select id="location" required>
+                <option value="">Select Location</option>
+                <option value="HBK">HBK Refurbishment Area</option>
+                <option value="PM_Paint_WS">PM Paint WS</option>
+                <option value="North_End">North End</option>
+                <option value="Contractor_Containers">Contractor Containers</option>
+                <option value="TT_Service_Bay">TT Service Bay</option>
+                <option value="RTG_Service_Bay">RTG Service Bay</option>
+                <option value="Tyre_Shop">Tyre Shop</option>
+                <option value="Diesel_Point">Diesel Point</option>
+                <option value="Admin_Building">Admin Building</option>
+                <option value="PM_WS">PM WS</option>
+                <option value="ENG_Building">ENG Building</option>
+                <option value="Substation">Substation</option>
+                <option value="Spreader_WS">Spreader WS</option>
+                <option value="Contractor_Building">Contractor Building</option>
+                <option value="Scrap_Bay">Scrap Bay</option>
+                <option value="Wharf">Wharf</option>
+                <option value="Pilot_Road">Pilot Road</option>
+                <option value="1A">1A</option>
+                <option value="2A">2A</option>
+                <option value="3A">3A</option>
+                <option value="4A">4A</option>
+                <option value="1B">1B</option>
+                <option value="2B">2B</option>
+                <option value="3B">3B</option>
+                <option value="4B">4B</option>
+                <option value="1C">1C</option>
+                <option value="2C">2C</option>
+                <option value="3C">3C</option>
+                <option value="4C">4C</option>
+                <option value="1D">1D</option>
+                <option value="2D">2D</option>
+                <option value="3D">3D</option>
+                <option value="4D">4D</option>
+                <option value="1E">1E</option>
+                <option value="2E">2E</option>
+                <option value="3E">3E</option>
+                <option value="4E">4E</option>
+                <option value="1F">1F</option>
+                <option value="2F">2F</option>
+                <option value="3F">3F</option>
+                <option value="4F">4F</option>
+                <option value="QC01">QC01</option>
+                <option value="QC05">QC05</option>
+                <option value="QC06">QC06</option>
+                <option value="QC07">QC07</option>
+                <option value="QC08">QC08</option>
+                <option value="QC09">QC09</option>
+                <option value="QC11">QC11</option>
+                <option value="QC12">QC12</option>
+                <option value="QC13">QC13</option>
+                <option value="QC14">QC14</option>
+            </select>
+
+            <label for="equipment">Equipment:</label>
+            <select id="equipment" >
+                <option value="">Select Equipment</option>
+                <option value="RT02">RT02</option>
+                <option value="RT03">RT03</option>
+                <option value="RT04">RT04</option>
+                <option value="RT05">RT05</option>
+                <option value="RT06">RT06</option>
+                <option value="RT07">RT07</option>
+                <option value="RT08">RT08</option>
+                <option value="RT09">RT09</option>
+                <option value="RT10">RT10</option>
+                <option value="RT11">RT11</option>
+                <option value="RT13">RT13</option>
+                <option value="RT15">RT15</option>
+                <option value="RT17">RT17</option>
+                <option value="RT18">RT18</option>
+                <option value="RT20">RT20</option>
+                <option value="RT22">RT22</option>
+                <option value="RT23">RT23</option>
+                <option value="RT24">RT24</option>
+                <option value="RT25">RT25</option>
+                <option value="RT26">RT26</option>
+                <option value="RT27">RT27</option>
+                <option value="RT28">RT28</option>
+                <option value="RT29">RT29</option>
+                <option value="RT30">RT30</option>
+                <option value="RT31">RT31</option>
+                <option value="RT32">RT32</option>
+                <option value="RT33">RT33</option>
+                <option value="RT34">RT34</option>
+                <option value="RT35">RT35</option>
+                <option value="RT36">RT36</option>
+                <option value="RT37">RT37</option>
+            </select>
+            <label for="workers">Workers:</label>
+            <input type="number" id="workers" min="1" required>
+
+            <button type="submit">Allocate</button>
+        </form>
+    </div>
+    <h1>Daily Contractor Allocation Map</h1>
+    <div class="time-container" id="currentTime"></div>
+    <div class="map-container"></div>
+    <div class="summary-container">
+        <h3>Summary of Contractor Allocation</h3>
+        <table id="summaryTable">
+            <thead>
+                <tr>
+                    <th>Contractor</th>
+                    <th>Location</th>
+                    <th>Workers</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Summary rows will go here -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2">Total Workers</th>
+                    <th id="totalWorkers">0</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+   <script>
+        // Update the time function to show real-time date and time
+function updateTime() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = now.toLocaleDateString(undefined, options);
+    const formattedTime = now.toLocaleTimeString();
+    document.getElementById('currentTime').textContent = `${formattedDate} | ${formattedTime}`;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+
+// Handle form submission for contractor allocation
+document.getElementById('allocationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const contractor = document.getElementById('contractor').value.trim();
+    const location = document.getElementById('location').value;
+    const equipment = document.getElementById('equipment').value;
+    const workers = parseInt(document.getElementById('workers').value, 10); // Convert to number
+
+    // Check if location or workers field is missing
+    if (!location || !workers) {
+        alert("Please fill in all fields before submitting.");
+        return;
+    }
+
+    const mapContainer = document.querySelector('.map-container');
+
+    // Define location map with coordinates
+    const locationMap = {
+        'NorthEnd': { top: '-15px' , left: '197px' },
+        '4F': { top: '652px', left: '244px' },
+        // Other locations can be added similarly...
+    };
+
+    if (!locationMap[location]) {
+        alert("Invalid location selected.");
+        return;
+    }
+
+    // Check if a contractor-label already exists for this location
+    let contractorLabel = document.querySelector(`.contractor-label[data-location="${location}"]`);
+    if (!contractorLabel) {
+        contractorLabel = document.createElement('div');
+        contractorLabel.classList.add('contractor-label');
+        contractorLabel.style.top = locationMap[location].top;
+        contractorLabel.style.left = locationMap[location].left;
+        contractorLabel.dataset.location = location;
+
+        const labelText = document.createElement('div');
+        labelText.classList.add('label-text');
+
+        contractorLabel.appendChild(labelText);
+        mapContainer.appendChild(contractorLabel);
+    }
+
+    // Find the label-text inside the contractor-label
+    let labelText = contractorLabel.querySelector('.label-text');
+
+    // Create a new contractor entry inside label-text
+    const contractorEntry = document.createElement('div');
+    contractorEntry.classList.add('contractor-entry');
+
+    // Create a remove button for this contractor only
+    const removeBtn = document.createElement('button');
+    removeBtn.classList.add('remove-btn');
+    removeBtn.textContent = '×';
+    removeBtn.addEventListener('click', () => {
+        contractorEntry.remove();
+
+        // If no contractors remain, remove the entire label
+        if (labelText.children.length === 0) {
+            contractorLabel.remove();
+        }
+    });
+
+    contractorEntry.appendChild(removeBtn);
+    contractorEntry.appendChild(document.createTextNode(` ${contractor} (${workers}) ${equipment}`));
+
+    // Append the contractor entry (with spacing)
+    labelText.appendChild(contractorEntry);
+
+    // Update summary table
+    const summaryTableBody = document.getElementById('summaryTable').querySelector('tbody');
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td>${contractor}</td>
+        <td>${location}</td>
+        <td>${workers}</td>
+        <td><button class="remove-btn">X</button></td>
+    `;
+    summaryTableBody.appendChild(newRow);
+
+    // Update the total workers count
+    const totalWorkersCell = document.getElementById('totalWorkers');
+    const currentTotal = parseInt(totalWorkersCell.textContent, 10);
+    totalWorkersCell.textContent = currentTotal + workers;
+
+    // Prepare data to send to the backend API
+    const contractorData = {
+        contractor: contractor,
+        location: location,
+        equipment: equipment,
+        workers: workers
+    };
+
+    // Send the data to the backend using a POST request
+    fetch('http://127.0.0.1:8000/contractors', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contractorData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data); // Handle success response
+    })
+    .catch((error) => {
+        console.error('Error:', error); // Handle error response
+    });
+
+    // Reset the form
+    document.getElementById('allocationForm').reset();
+});
+
+// Event listener to handle removing contractor from summary table
+document.getElementById('summaryTable').addEventListener('click', function(event) {
+    if (event.target.classList.contains('remove-btn')) {
+        const row = event.target.closest('tr'); // Get the closest table row
+        const workersCell = row.querySelector('td:nth-child(3)'); // Get the workers column
+        const workersCount = parseInt(workersCell.textContent, 10) || 0; // Extract the workers number
+        
+        row.remove(); // Remove the row
+
+        // Update total workers count
+        const totalWorkersCell = document.getElementById('totalWorkers');
+        const currentTotal = parseInt(totalWorkersCell.textContent, 10) || 0;
+        totalWorkersCell.textContent = currentTotal - workersCount;
+    }
+});
+
+// Disable page refresh using F5 or Ctrl+R
+document.addEventListener("keydown", function (event) {
+    if (event.key === "F5" || (event.ctrlKey && event.key === "r")) {
+        event.preventDefault();
+        alert("Page refresh is disabled!");
+    }
+});
+
+// Handle window unload confirmation
+window.addEventListener("beforeunload", function (event) {
+    event.preventDefault();
+    event.returnValue = ""; // Chrome requires returnValue to show a confirmation
+});
+
+// Disable back button (history push)
+history.pushState(null, "", location.href);
+window.onpopstate = function () {
+    history.pushState(null, "", location.href);
+};
+
+// Disable right-click (optional)
+document.addEventListener("contextmenu", function (event) {
+    event.preventDefault(); // Disable right-click
+});
+
+// Disable developer tools (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
+document.addEventListener("keydown", function (event) {
+    if (event.key === "F12" ||
+        (event.ctrlKey && event.shiftKey && event.key === "I") ||
+        (event.ctrlKey && event.shiftKey && event.key === "J") ||
+        (event.ctrlKey && event.key === "U")) {
+        event.preventDefault();
+        alert("Developer tools are disabled!");
+    }
+});
+
+</script>
+
+
+</body>
+</html>

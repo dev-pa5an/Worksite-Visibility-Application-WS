@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="max-age=86400">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worksite Contractor Allocation</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <h2>Contractor Allocation</h2>
+    <div class="form-container">
+        <form id="allocationForm">
+            <label for="contractor">Contractor/SAGT Name:</label>
+            <select id="contractor">
+                <option value="">Select Contractor/SAGT Name</option>
+                <option value="TEA E">TEA E</option>
+                <option value="TEA M">TEA M</option>
+                <option value="FMN E">FMN E</option>
+                <option value="FMN M">FMN M</option>
+                <option value="FMN R">FMN R</option>
+                <option value="CCO">CCO</option>
+                <option value="RRC">RRC</option>
+                <option value="ALL">ALLWorks</option>
+                <option value="TPL">TPL</option>
+                <option value="CRW">CRW</option>
+                <option value="MTE">MTE</option>
+                <option value="CWIN">CWIN</option>
+                <option value="PAVARA">PAVARA</option>
+                <option value="ZPMC">ZPMC</option>
+                <option value="MAYPHILL">Mayphill</option>
+                <option value="CB">CB</option>
+                <option value="Thilak C">Thilak C</option>
+                <option value="AT Cooray">AT Cooray</option>
+                <option value="Hayleys">Hayleys</option>
+                <option value="Termss G">Termss G</option>
+            </select>
+
+            <label for="location">Location:</label>
+            <select id="location" required>
+                <option value="">Select Location</option>
+                <option value="HBK">HBK Refurbishment Area</option>
+                <option value="PM_Paint_WS">PM Paint WS</option>
+                <option value="North_End">North End</option>
+                <option value="Contractor_Containers">Contractor Containers</option>
+                <option value="TT_Service_Bay">TT Service Bay</option>
+                <option value="RTG_Service_Bay">RTG Service Bay</option>
+                <option value="Tyre_Shop">Tyre Shop</option>
+                <option value="Diesel_Point">Diesel Point</option>
+                <option value="Admin_Building">Admin Building</option>
+                <option value="PM_WS">PM WS</option>
+                <option value="ENG_Building">ENG Building</option>
+                <option value="Substation">Substation</option>
+                <option value="Spreader_WS">Spreader WS</option>
+                <option value="Contractor_Building">Contractor Building</option>
+                <option value="Scrap_Bay">Scrap Bay</option>
+                <option value="Wharf">Wharf</option>
+                <option value="Pilot_Road">Pilot Road</option>
+                <option value="1A">1A</option>
+                <option value="2A">2A</option>
+                <option value="3A">3A</option>
+                <option value="4A">4A</option>
+                <option value="1B">1B</option>
+                <option value="2B">2B</option>
+                <option value="3B">3B</option>
+                <option value="4B">4B</option>
+                <option value="1C">1C</option>
+                <option value="2C">2C</option>
+                <option value="3C">3C</option>
+                <option value="4C">4C</option>
+                <option value="1D">1D</option>
+                <option value="2D">2D</option>
+                <option value="3D">3D</option>
+                <option value="4D">4D</option>
+                <option value="1E">1E</option>
+                <option value="2E">2E</option>
+                <option value="3E">3E</option>
+                <option value="4E">4E</option>
+                <option value="1F">1F</option>
+                <option value="2F">2F</option>
+                <option value="3F">3F</option>
+                <option value="4F">4F</option>
+                <option value="QC01">QC01</option>
+                <option value="QC05">QC05</option>
+                <option value="QC06">QC06</option>
+                <option value="QC07">QC07</option>
+                <option value="QC08">QC08</option>
+                <option value="QC09">QC09</option>
+                <option value="QC11">QC11</option>
+                <option value="QC12">QC12</option>
+                <option value="QC13">QC13</option>
+                <option value="QC14">QC14</option>
+            </select>
+
+            <label for="equipment">Equipment:</label>
+            <select id="equipment">
+                <option value="">Select Equipment</option>
+                <option value="RT02">RT02</option>
+                <option value="RT03">RT03</option>
+                <option value="RT04">RT04</option>
+                <option value="RT05">RT05</option>
+                <option value="RT06">RT06</option>
+                <option value="RT07">RT07</option>
+                <option value="RT08">RT08</option>
+                <option value="RT09">RT09</option>
+                <option value="RT10">RT10</option>
+                <option value="RT11">RT11</option>
+                <option value="RT13">RT13</option>
+                <option value="RT15">RT15</option>
+                <option value="RT17">RT17</option>
+                <option value="RT18">RT18</option>
+                <option value="RT20">RT20</option>
+                <option value="RT22">RT22</option>
+                <option value="RT23">RT23</option>
+                <option value="RT24">RT24</option>
+                <option value="RT25">RT25</option>
+                <option value="RT26">RT26</option>
+                <option value="RT27">RT27</option>
+                <option value="RT28">RT28</option>
+                <option value="RT29">RT29</option>
+                <option value="RT30">RT30</option>
+                <option value="RT31">RT31</option>
+                <option value="RT32">RT32</option>
+                <option value="RT33">RT33</option>
+                <option value="RT34">RT34</option>
+                <option value="RT35">RT35</option>
+                <option value="RT36">RT36</option>
+                <option value="RT37">RT37</option>
+            </select>
+
+            <label for="workers">Workers:</label>
+            <input type="number" id="workers" min="1" required>
+
+            <button type="submit">Allocate</button>
+        </form>
+    </div>
+
+    <h1>Daily Contractor Allocation Map</h1>
+    <div class="time-container" id="currentTime"></div>
+    <div class="map-container"></div>
+    <div class="summary-container">
+        <h3>Summary of Contractor Allocation</h3>
+        <table id="summaryTable">
+            <thead>
+                <tr>
+                    <th>Contractor</th>
+                    <th>Location</th>
+                    <th>Workers</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2">Total Workers</th>
+                    <th id="totalWorkers">0</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script src="static/index.js"></script>
+</body>
+</html>
