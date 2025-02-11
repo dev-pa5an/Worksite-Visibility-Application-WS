@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map with Form and Table</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        #map { height: 700px; width: 950px; }
+        #form-container { display: none; padding: 10px; background: #f9f9f9; border: 1px solid #ccc; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <!-- Form to enter name and age -->
+    <div id="form-container">
+        <h3>Enter Details</h3>
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <label for="location">Location:</label>
+        <input type="text" id="location" required>
+        <label for="count">Count:</label>
+        <input type="number" id="count" required>
+        <button onclick="saveDetails()">Save</button>
+        <button onclick="cancelEntry()">Cancel</button>
+    </div>
+
+    <!-- Table to display name and age -->
+    <h3>Submitted Data</h3>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // var map = L.map('map').setView([51.505, -0.09], 13); // Set initial map center and zoom
+
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '© OpenStreetMap contributors'
+        // }).addTo(map);
+        // Initialize the map
+        var map = L.map('map').setView([51.49532, -0.07], 16); // Set the center coordinates and zoom level
+
+        // Define the bounds for your custom image
+        var imageUrl = 'map.jpg'; // Path to your custom image (replace with the correct path)
+        var imageBounds = [[51.49, -0.08], [51.5, -0.06]]; // Define the geographical bounds (top-left and bottom-right corners)
+
+        // Add the image as an overlay on the map
+        L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+        const socket = io("http://localhost:3000")
+        let markers = {};
+
+        socket.on("load_markers", (serveMarkers) => {
+            serveMarkers.foreach((marker) => addMarker(marker, false));
+        });
+        socket.on("update_markers", (serverMarkers) => {
+            clearMarkers();
+            serverMarkers.forEach((marker) => addMarker(marker, false));
+        });
+        // Add marker function
+        function addMarker(markerData, emit = true) {
+            const marker = L.marker([markerData.lat, markerData.lng], { draggable: true }).addTo(map);
+
+            marker.on("dragend", function () {
+                const { lat, lng } = marker.getLatLng();
+                socket.emit("update_marker", { id: markerData.id, lat, lng });
+            });
+
+            markers[markerData.id] = marker;
+
+            if (emit) {
+                socket.emit("add_marker", markerData);
+            }
+        }
+        // Event listener for map click
+        map.on('click', function (e) {
+            // if (currentMarker) {
+            //     map.removeLayer(currentMarker); // Remove existing marker if present
+            // }
+
+            // Place a marker at the clicked location
+            // currentMarker = L.marker(e.latlng).addTo(map);
+            const markerData = {
+            id: Date.now().toString(),
+            lat: e.latlng.lat,
+            lng: e.latlng.lng,
+            };
+            addMarker(markerData, true);
+
+            // Show form for entering details
+            document.getElementById('form-container').style.display = 'block';
+        });
+
+        // Function to save user details in the table
+        function saveDetails() {
+            var name = document.getElementById('name').value;
+            var location = document.getElementById('location').value;
+            var count = document.getElementById('count').value;
+
+            if (name.trim() === "" || location.trim() === "" || count.trim() === "") {
+                alert("Please fill in both fields!");
+                return;
+            }
+
+            // Add data to the table
+            var table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            newRow.insertCell(0).innerText = name;
+            newRow.insertCell(1).innerText = location;
+            newRow.insertCell(2).innerText = count;
+
+            // Hide form and clear input fields
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('name').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('count').value = '';
+
+            // Remove marker after saving details
+            // if (currentMarker) {
+            //     map.removeLayer(currentMarker);
+            //     currentMarker = null;
+            // }
+        }
+
+        // Function to cancel entry and hide form
+        function cancelEntry() {
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('name').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('count').value = '';
+
+            if (currentMarker) {
+                map.removeLayer(currentMarker); // Remove marker if user cancels
+                currentMarker = null;
+            }
+        }
+    </script>
+
+</body>
+</html>
