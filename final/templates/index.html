@@ -93,21 +93,61 @@
         });
 
         // Add marker function
-        function addMarker(markerData, emit = true) {
-            const marker = L.marker([markerData.lat, markerData.lng], { draggable: true }).addTo(map);
+        // function addMarker(markerData, emit = true) {
+        //     const marker = L.marker([markerData.lat, markerData.lng], { draggable: true }).addTo(map);
 
+        //     marker.on("dragend", function () {
+        //         const { lat, lng } = marker.getLatLng();
+        //         socket.emit("update_marker", { id: markerData.id, lat, lng });
+        //     });
+
+        //     markers[markerData.id] = marker;
+
+        //     if (emit) {
+        //         socket.emit("add_marker", markerData);
+        //     }
+        // }
+
+        function addMarker(markerData, emit = true) {
+            // Create a marker icon
+            const marker = L.marker([markerData.lat, markerData.lng], { draggable: true }).addTo(map);
+        
+            // Create a text box (popup-like div)
+            const customPopup = L.divIcon({
+                className: "custom-marker", // CSS styling
+                html: `
+                    <div class="marker-label">
+                        <strong>${markerData.name}</strong><br>
+                        ${markerData.location}<br>
+                        Count: ${markerData.count}
+                    </div>
+                `,
+                iconSize: [150, 50], // Adjust size as needed
+                iconAnchor: [75, 25] // Adjust position relative to marker
+            });
+        
+            // Attach the text box next to the marker
+            const label = L.marker([markerData.lat, markerData.lng], { icon: customPopup }).addTo(map);
+        
+            // Handle marker drag
             marker.on("dragend", function () {
                 const { lat, lng } = marker.getLatLng();
+                label.setLatLng([lat, lng]); // Move label with marker
+        
+                // Emit updated marker position
                 socket.emit("update_marker", { id: markerData.id, lat, lng });
             });
-
-            markers[markerData.id] = marker;
-
+        
+            // Store marker references
+            markers[markerData.id] = { marker, label };
+        
+            // Emit new marker data if it's a user-added marker
             if (emit) {
                 socket.emit("add_marker", markerData);
             }
         }
 
+        
         // Remove all markers
         function clearMarkers() {
             Object.values(markers).forEach(marker => map.removeLayer(marker));
