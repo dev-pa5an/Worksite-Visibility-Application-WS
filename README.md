@@ -1,4 +1,4 @@
-# Contractor Visibility Map  
+# Worksite Visibility Map  
 
 ## Overview  
 Worksite Visibility Map is a real-time monitoring system that allows users to track the locations of contractors working on a site. The application features an interactive map where users can add, move, and remove contractor markers while keeping data synchronized across all connected clients.  
