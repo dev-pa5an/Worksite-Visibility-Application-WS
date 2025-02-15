@@ -17,7 +17,7 @@ Worksite Visibility Map is a real-time monitoring system that allows users to tr
 ### **1. Clone the Repository**  
 First, clone this repository and navigate to the project folder:  
 ```sh
-git clone https://github.com/dev-pa5an/map.git
+git clone https://github.com/dev-pa5an/Worksite-Visibility-application-WS.git
 cd app2.0
 ```
 ### **2. Create a Virtual Environment (Optional but Recommended)**  
