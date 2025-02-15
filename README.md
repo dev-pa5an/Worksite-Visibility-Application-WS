@@ -61,4 +61,4 @@ The server will run at **http://localhost:8000**. Open this URL in your browser.
 
 ## **Screenshot**  
 
-![Application Screenshot](Sceenshots/s7.png)
+![Application Screenshot](app2.0/Screenshots/s7.png)
